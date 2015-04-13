@@ -16,6 +16,7 @@
   ],
   "main": "./src/index.js",
   "dependencies": {
+    "get-port":"*",
     "async": "*",
     "dstruc": "*",
     "bouncy": "git://github.com/xiaojue/bouncy.git#dc0f3021f25f000c9eadc5c7fe1091fb97089918",
