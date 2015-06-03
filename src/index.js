@@ -1,3 +1,4 @@
+var config = require('../config');
 module.exports = function(ns, plugin, debug) {
   plugin.load(__dirname);
   var app = ns('app');
@@ -19,7 +20,7 @@ module.exports = function(ns, plugin, debug) {
     var bouncyServer = ns('bouncy');
     var vhosts = ns('vhostManager');
 
-    bouncyServer.init(4444);
+    bouncyServer.init(config.webPort);
 
     bouncyServer.start(function() {
       console.log('bouncyServer start');

@@ -1,5 +1,6 @@
 var nodeStatic = require('node-static').Server;
 var http = require('http');
+var lodash = require('lodash');
 var getPort = require('get-port');
 var fs = require('fs');
 var async = require('async');
@@ -20,19 +21,22 @@ module.exports = function(ns, debug) {
         if (err) cb(err);
         else {
           bouncy.set(domain, port, path, openOnlineProxy);
-          var server = {};
-          server[domain] = {
+          var server = {
+            domain:domain,
             port: port,
             path: path,
             openOnlineProxy: openOnlineProxy
           };
           serverList.push(server);
+          console.log(port);
           self.restart(cb);
         }
       });
     },
     remove: function(domain, cb) {
-      delete serverList[domain];
+      lodash.remove(serverList,function(item){
+        return item = domain; 
+      });
       bouncy.unset(domain);
       this.restart(cb);
     },
@@ -44,7 +48,6 @@ module.exports = function(ns, debug) {
           port = item.port,
           openOnlineProxy = item.openOnlineProxy,
           domain = item.domain;
-
           if (path && fs.existsSync(path)) {
             if (sys === 'win32') path = path.toLowerCase();
             var fileServer = new nodeStatic(path, {
