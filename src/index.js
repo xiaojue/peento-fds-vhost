@@ -3,8 +3,6 @@ module.exports = function(ns, plugin, debug) {
   var app = ns('app');
   app.once('start', function() {
 
-    var config = ns('configManager');
-
     var nav = ns('nav', []);
 
     app.call('nav.add', [{
@@ -20,8 +18,6 @@ module.exports = function(ns, plugin, debug) {
 
     var bouncyServer = ns('bouncy');
     var vhosts = ns('vhostManager');
-
-    bouncyServer.init(config.webPort);
 
     bouncyServer.start(function() {
       console.log('bouncyServer start');

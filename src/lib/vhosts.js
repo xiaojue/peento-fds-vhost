@@ -14,6 +14,10 @@ module.exports = function(ns, debug) {
   var statics = [];
   var staticsSockets = [];
 
+  for(var i in config){
+    serverList.push(config[i]); 
+  }
+
   var vhosts = {
     getServerList:function(){
       return serverList;
@@ -31,7 +35,7 @@ module.exports = function(ns, debug) {
             openOnlineProxy: openOnlineProxy
           };
           serverList.push(server);
-          console.log(port);
+          config.set(domain,server);
           self.restart(cb);
         }
       });
@@ -41,6 +45,7 @@ module.exports = function(ns, debug) {
         return item = domain; 
       });
       bouncy.unset(domain);
+      config.remove(domain);
       this.restart(cb);
     },
     start: function(cb) {

@@ -3,9 +3,6 @@ module.exports = function(ns) {
   var portServer = null;
 
   var bouncyServer = {
-    init: function(port) {
-      ns('vhost.config').set('port', port);
-    },
     set: function(domain, port, path, openOnlineProxy) {
       ns('vhost.config').set(domain, {
         port: port,
@@ -32,7 +29,7 @@ module.exports = function(ns) {
           debug(err);
         });
         portServer.on('listening', cb);
-        portServer.listen(ns('vhost.config').get('port'));
+        portServer.listen(ns('fdsConfig').webPort);
       }
     }
   };

@@ -4,7 +4,10 @@ module.exports = function(ns, createController, debug) {
     'name': 'vhost',
     'public': function(params, req, res, next) {
         var vhosts = ns('vhostManager');
-        res.render('vhost');
+        var serverList = vhosts.getServerList();
+        res.render('vhost',{
+          serverList:serverList
+        });
     }
   });
   return controller;
