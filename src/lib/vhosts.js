@@ -15,6 +15,9 @@ module.exports = function(ns, debug) {
   var staticsSockets = [];
 
   var vhosts = {
+    getServerList:function(){
+      return serverList;
+    },
     add: function(domain, path, openOnlineProxy, cb) {
       var self = this;
       getPort(function(err, port) {
@@ -117,4 +120,3 @@ module.exports = function(ns, debug) {
   };
   ns('vhostManager', vhosts);
 };
-

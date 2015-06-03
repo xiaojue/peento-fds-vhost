@@ -5,7 +5,55 @@
       <img src="{{'images/icons/svg/paper-bag.svg'|asset_url}}" alt="Pocket" width="35" height="35"> Vhost
     </h4>
     <hr>
-    <div id="vhosts"></div>
+    <div id="vhosts">
+      <table id="vhostTable" class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            <th width="15%">
+              Domain 
+            </th> 
+            <th width="40%">
+              Local Path  
+            </th> 
+            <th width="15%">
+              Proxy Switch
+            </th>
+            <th width="15%">
+              Open Switch
+            </th>
+            <th width="15%">
+              Operate
+            </th>
+          </tr> 
+        </thead>
+        <tbody>
+      {% if serverList.length > 0 %}
+        {% for item in serverList %} 
+          <tr>
+            <td data-action="editinput" data-node="vhostsdomain" data-value="{{ item.domain }}">
+              {{ item.domain }} 
+            </td> 
+            <td data-action="editinput" data-node="vhostpath" data-value="{{ item.domain }}">
+              {{ item.path }}
+            </td>
+            <td>
+              <input data-node="openOnlineProxy" data-toggle="switch" data-domain="{{ item.domain }}" type="checkbox" {{ host.openOnlineProxy == 0 ? '': 'checked' }}>
+            </td>
+            <td>
+              <input data-node="toggleRun" data-toggle="switch" type="checkbox" data-value="{{ item.domain }}" {{ host.status ? 'checked' : '' }}>
+            </td>
+            <td>
+              <button data-value="{{ item.domain }}" type="button" class="btn btn-xs btn-danger" title="delete" data-action="removeVhost">Delete</button>
+            </td>
+          </tr>
+        {% endfor %}
+      {% endif %}
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-sm btn-primary" data-action="addVhost">
+      <span class="fui-plus"></span>
+    </button> 
+    </div>
   </div>
 </div>
 {% include "inc/footer" %}

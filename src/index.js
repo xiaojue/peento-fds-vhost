@@ -1,8 +1,9 @@
-var config = require('../config');
 module.exports = function(ns, plugin, debug) {
   plugin.load(__dirname);
   var app = ns('app');
   app.once('start', function() {
+
+    var config = ns('configManager');
 
     var nav = ns('nav', []);
 
@@ -26,8 +27,10 @@ module.exports = function(ns, plugin, debug) {
       console.log('bouncyServer start');
     });
 
+    /*
     vhosts.add('www.abc.com','/Users/chenchen/fuqiang/dev/peento-fds/',true,function(){
       console.log('add abc'); 
     });
+    */
   });
 };
