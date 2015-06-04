@@ -5,7 +5,7 @@ module.exports = function(ns, createController, debug) {
     'public': function(params, req, res, next) {
         var vhosts = ns('vhostManager');
         var serverList = vhosts.getServerList();
-        res.setLocals('serverList',JSON.stringify(serverList));
+        res.setLocals('serverList',serverList);
         res.render('vhost');
     }
   });

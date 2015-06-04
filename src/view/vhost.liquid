@@ -1,12 +1,15 @@
 {% include "inc/header" %}
-<div id="con-wrapper">
+<script>
+  window.serverList = {{ serverList }}
+</script>
+<div id="con-wrapper" ng-app="vhost">
   <div class="container J_content">
     <h4>
       <img src="{{'images/icons/svg/paper-bag.svg'|asset_url}}" alt="Pocket" width="35" height="35"> Vhost
     </h4>
     <hr>
-    <div id="vhosts">
-      <table id="vhostTable" class="table table-condensed table-hover">
+    <div ng-controller="vhostTable">
+      <table class="table table-condensed table-hover">
         <thead>
           <tr>
             <th width="15%">
@@ -27,30 +30,40 @@
           </tr> 
         </thead>
         <tbody>
-      {% if serverList.length > 0 %}
-        {% for item in serverList %} 
-          <tr>
-            <td data-action="editinput" data-node="vhostsdomain" data-value="{{ item.domain }}">
-              {{ item.domain }} 
-            </td> 
-            <td data-action="editinput" data-node="vhostpath" data-value="{{ item.domain }}">
-              {{ item.path }}
-            </td>
-            <td>
-              <input data-node="openOnlineProxy" data-toggle="switch" data-domain="{{ item.domain }}" type="checkbox" {{ host.openOnlineProxy == 0 ? '': 'checked' }}>
-            </td>
-            <td>
-              <input data-node="toggleRun" data-toggle="switch" type="checkbox" data-value="{{ item.domain }}" {{ host.status ? 'checked' : '' }}>
-            </td>
-            <td>
-              <button data-value="{{ item.domain }}" type="button" class="btn btn-xs btn-danger" title="delete" data-action="removeVhost">Delete</button>
-            </td>
-          </tr>
-        {% endfor %}
-      {% endif %}
+        <tr x-ng-repeat="item in serverList" ng-cloak ng-show="serverList.length">
+          <td>
+            [[ item.domain ]]
+          </td>
+          <td>
+            [[ item.path ]]
+          </td>
+          <td>
+            <input type="checkbox" ng-model="item.openOnlineProxy" switch>
+          </td>
+          <td>
+            <input type="checkbox" ng-model="item.status" switch>
+          </td>
+          <td>
+            <button ng-click="delete(item.domain)" type="button" class="btn btn-xs btn-danger" title="delete">Delete</button>
+          </td>
+        </tr>
+        <tr ng-show="showNewline" ng-cloak>
+          <td>
+            <input type="text" ng-model="domain"> 
+          </td>
+          <td>
+            <input type="text" ng-model="path"> 
+          </td>
+          <td></td>
+          <td></td>
+          <td>
+            <input type="button" value="save" ng-click="save()"> 
+            <input type="button" value="cancel" ng-click="cancel()"> 
+          </td>
+        </tr>
         </tbody>
     </table>
-    <button type="button" class="btn btn-sm btn-primary" data-action="addVhost">
+    <button type="button" ng-click="create()" class="btn btn-sm btn-primary">
       <span class="fui-plus"></span>
     </button> 
     </div>

@@ -23,10 +23,5 @@ module.exports = function(ns, plugin, debug) {
       console.log('bouncyServer start');
     });
 
-    /*
-    vhosts.add('www.abc.com','/Users/chenchen/fuqiang/dev/peento-fds/',true,function(){
-      console.log('add abc'); 
-    });
-    */
   });
 };

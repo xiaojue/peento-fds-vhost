@@ -7,46 +7,61 @@ var async = require('async');
 var os = require('os');
 var sys = os.platform();
 
+function hasDomain(domain, serverList) {
+  return serverList.filter(function(item) {
+    return item.domain == domain;
+  }).length > 0 ? true: false;
+}
+
 module.exports = function(ns, debug) {
   var config = ns('vhost.config');
   var bouncy = ns('bouncy');
   var serverList = [];
   var statics = [];
   var staticsSockets = [];
+  var vs = config.getJson();
 
-  for(var i in config){
-    serverList.push(config[i]); 
+  for (var i in vs) {
+    serverList.push(vs[i]);
   }
 
   var vhosts = {
-    getServerList:function(){
+    getServerList: function() {
       return serverList;
     },
     add: function(domain, path, openOnlineProxy, cb) {
       var self = this;
-      getPort(function(err, port) {
-        if (err) cb(err);
-        else {
-          bouncy.set(domain, port, path, openOnlineProxy);
-          var server = {
-            domain:domain,
-            port: port,
-            path: path,
-            openOnlineProxy: openOnlineProxy
-          };
-          serverList.push(server);
-          config.set(domain,server);
-          self.restart(cb);
-        }
-      });
+      if (!hasDomain(domain, serverList)) {
+        getPort(function(err, port) {
+          if (err) cb(err);
+          else {
+            bouncy.set(domain, port, path, openOnlineProxy);
+            var server = {
+              domain: domain,
+              port: port,
+              path: path,
+              openOnlineProxy: openOnlineProxy
+            };
+            serverList.push(server);
+            config.set(domain, server);
+            self.restart(cb);
+          }
+        });
+      } else {
+        cb();
+      }
     },
     remove: function(domain, cb) {
-      lodash.remove(serverList,function(item){
-        return item = domain; 
-      });
-      bouncy.unset(domain);
-      config.remove(domain);
-      this.restart(cb);
+      if (hasDomain(domain, serverList)) {
+        lodash.remove(serverList, function(item) {
+          return item.domain == domain;
+        });
+        bouncy.unset(domain);
+        config.remove(domain);
+        this.restart(cb);
+      } else {
+        cb();
+      }
     },
     start: function(cb) {
       debug('start vhost');
@@ -125,3 +140,4 @@ module.exports = function(ns, debug) {
   };
   ns('vhostManager', vhosts);
 };
+
